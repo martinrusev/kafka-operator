@@ -1,0 +1,20 @@
+name: kafka
+description: |
+  Kafka is a high-performance, scalable, distributed messaging system.
+tags:
+  - kafka
+  - messaging
+platforms:
+  - kubernetes
+bases:
+  - name: ubuntu
+    channel: 20.04/stable
+containers:
+  kafka:
+    resource: kafka-image
+resources:
+  kafka-image:
+    type: oci-image
+    description: Docker image for Kafka
+    auto-fetch: true
+    upstream-source: 'confluentinc/cp-kafka:5.4.4'

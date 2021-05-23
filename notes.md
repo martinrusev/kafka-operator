@@ -51,6 +51,10 @@ total 40K
 -rw-r--r-- 1 appuser appuser  305 Apr 30 00:05 tools-log4j.properties.template
 ```
 
+- Docker image instructions:
+
+https://docs.confluent.io/platform/current/installation/docker/config-reference.html
+
 
 ## Useful commands
 
@@ -63,3 +67,13 @@ total 40K
 To check the corresponding kafka version:
 
 https://docs.confluent.io/platform/current/release-notes/index.html
+
+
+## Charm specifics
+
+Relating with zookeeper:
+
+
+```
+juju deploy charmed-osm-zookeeper-k8s
+```

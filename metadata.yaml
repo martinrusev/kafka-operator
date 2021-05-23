@@ -12,6 +12,12 @@ bases:
 containers:
   kafka:
     resource: kafka-image
+provides:
+  kafka:
+    interface: kafka
+requires:
+  zookeeper:
+    interface: zookeeper
 resources:
   kafka-image:
     type: oci-image

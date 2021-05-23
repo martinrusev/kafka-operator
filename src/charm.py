@@ -2,24 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import os
-import base64
-import yaml
-import json
-import uuid
-import configparser
-import tempfile
-
-
-import ops
 from ops.charm import CharmBase, PebbleReadyEvent
 from ops.framework import StoredState
 from ops.main import main
-from ops.model import ActiveStatus, ModelError, MaintenanceStatus
+from ops.model import ActiveStatus, MaintenanceStatus
 from ops.pebble import ServiceStatus, Layer
 
 logger = logging.getLogger(__name__)
-
 
 
 SERVICE = "kafka"
@@ -82,6 +71,7 @@ class KafkaOperator(CharmBase):
                     "command": "/etc/confluent/docker/run",
                     "startup": "enabled",
                     "environment": {
+                        "KAFKA_BROKER_ID": 1,
     #                           KAFKA_BROKER_ID: 1
     #   KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     #   KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
@@ -94,8 +84,6 @@ class KafkaOperator(CharmBase):
         }
 
         return layer
-
-
 
 
 if __name__ == "__main__":

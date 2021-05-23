@@ -13,19 +13,16 @@ logger = logging.getLogger(__name__)
 
 SERVICE = "kafka"
 
+
 class KafkaOperator(CharmBase):
-    """Charm to run Kafka on Kubernetes.
-    """
+    """Charm to run Kafka on Kubernetes."""
 
     _stored = StoredState()
 
     def __init__(self, *args):
         super().__init__(*args)
 
-        self.framework.observe(
-            self.on.kafka_pebble_ready, self._on_kafka_pebble_ready
-        )
-
+        self.framework.observe(self.on.kafka_pebble_ready, self._on_kafka_pebble_ready)
 
     def _restart_kafka(self):
         logger.info("Restarting kafka ...")
@@ -59,7 +56,6 @@ class KafkaOperator(CharmBase):
         container.autostart()
         self.unit.status = ActiveStatus("kafka started")
 
-
     def _kafka_layer(self) -> dict:
         layer = {
             "summary": "kafka layer",
@@ -72,13 +68,10 @@ class KafkaOperator(CharmBase):
                     "startup": "enabled",
                     "environment": {
                         "KAFKA_BROKER_ID": 1,
-    #                           KAFKA_BROKER_ID: 1
-    #   KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-    #   KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-    #   KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-    #   KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-    #   KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-                    }
+                        "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP": "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT",
+                        "KAFKA_INTER_BROKER_LISTENER_NAME": "PLAINTEXT",
+                        "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR": 1,
+                    },
                 }
             },
         }

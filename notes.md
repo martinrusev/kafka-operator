@@ -56,6 +56,7 @@ total 40K
 https://docs.confluent.io/platform/current/installation/docker/config-reference.html
 
 
+
 ## Useful commands
 
 - Get the confluent platform version
@@ -77,3 +78,12 @@ Relating with zookeeper:
 ```
 juju deploy charmed-osm-zookeeper-k8s
 ```
+
+
+# KIP-500 notes
+
+KIP-500 is the upcoming version of Kafka running without the Zookeeper dependecy.
+
+Getting started guide:
+
+https://github.com/apache/kafka/blob/2.8/config/kraft/README.md

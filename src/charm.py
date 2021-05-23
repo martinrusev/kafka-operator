@@ -6,7 +6,7 @@ from ops.charm import CharmBase, PebbleReadyEvent
 from ops.framework import StoredState
 from ops.main import main
 from ops.model import ActiveStatus, MaintenanceStatus
-from ops.pebble import ServiceStatus, Layer
+from ops.pebble import ServiceStatus, Layer, ServiceInfo
 
 logger = logging.getLogger(__name__)
 
@@ -39,20 +39,16 @@ class KafkaOperator(CharmBase):
         self.unit.status = ActiveStatus("kafka restarted")
 
     def _on_kafka_pebble_ready(self, event: PebbleReadyEvent) -> None:
-        container = event.workload
+        container = self.unit.get_container(SERVICE)
         logger.info("_on_kafka_pebble_ready")
 
-        # Check we can get a list of services back from the Pebble API
-        if self._is_running(container, "kafka"):
-            logger.info("kafka already started")
-            return
-
-        self._update_datasource_config()
-        self._generate_init_database_config()
+        # if container.get_service(SERVICE).is_running():
+        #     logger.info("kafka already started")
+        #     return
 
         logger.info("_start_kafka")
         layer = Layer(raw=self._kafka_layer())
-        container.add_layer("kafka", layer, combine=True)
+        container.add_layer(SERVICE, layer, combine=True)
         container.autostart()
         self.unit.status = ActiveStatus("kafka started")
 

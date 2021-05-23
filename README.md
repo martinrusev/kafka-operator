@@ -18,7 +18,7 @@ $ charmcraft build
 Created 'kafka.charm'.
 
 
-$ juju deploy ./kafka.charm --resource kafka-image=confluentinc/cp-kafka:5.4.4
+$ juju deploy ./kafka.charm --resource kafka-image=confluentinc/cp-kafka:6.1.1
 ```
 
 ## Developing

@@ -1,6 +1,7 @@
 name: kafka
 description: |
   Kafka is a high-performance, scalable, distributed messaging system.
+summary: Kafka charm for Kubernetes
 tags:
   - kafka
   - messaging

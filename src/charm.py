@@ -24,6 +24,16 @@ class KafkaOperator(CharmBase):
 
         self.framework.observe(self.on.kafka_pebble_ready, self._on_kafka_pebble_ready)
 
+        # -- database relation observations
+        self.framework.observe(self.on["zookeeper"].relation_changed, self.on_zookeeper_changed)
+        self.framework.observe(self.on["zookeeper"].relation_broken, self.on_zookeeper_broken)
+
+    def on_zookeeper_changed(self):
+        pass
+
+    def on_zookeeper_broken(self):
+        pass
+
     def _restart_kafka(self):
         logger.info("Restarting kafka ...")
 

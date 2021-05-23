@@ -4,7 +4,7 @@ deploy:
 
 
 remove:
-	juju remove-application kafka
+	juju remove-application kafka --force
 
 
 juju_reset:

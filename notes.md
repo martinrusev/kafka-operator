@@ -50,3 +50,16 @@ total 40K
 -rwxr-xr-x 1 appuser appuser 1.1K Apr 30 00:05 run
 -rw-r--r-- 1 appuser appuser  305 Apr 30 00:05 tools-log4j.properties.template
 ```
+
+
+## Useful commands
+
+- Get the confluent platform version
+
+```
+/usr/bin/kafka-broker-api-versions --bootstrap-server localhost:9092 --version
+```
+
+To check the corresponding kafka version:
+
+https://docs.confluent.io/platform/current/release-notes/index.html

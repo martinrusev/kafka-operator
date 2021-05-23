@@ -79,11 +79,8 @@ class KafkaOperator(CharmBase):
                 "kafka": {
                     "override": "replace",
                     "summary": "kafka service",
-                    "command": "kafka",
-                    "startup": "enabled",
-                    "environment": {
-
-                    },
+                    "command": "/etc/confluent/docker/run",
+                    "startup": "enabled"
                 }
             },
         }

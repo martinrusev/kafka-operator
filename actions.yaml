@@ -1,1 +1,16 @@
-{}
+create-topic:
+  description: Create a new Kafka topic
+  params:
+    topic:
+      type: string
+      description: Topic name
+    partitions:
+      type: integer
+      description: Number of partitions for the topic being created
+    replication:
+      type: integer
+      description: Replication factor for each partition in the topic
+  required: [topic, partitions, replication]
+  additionalProperties: false
+list-topics:
+  description: List all Kafka topics

@@ -57,16 +57,15 @@ class KafkaOperator(CharmBase):
             "services": {
                 "kafka-setup": {
                     "override": "replace",
-                    "summary": "kafka setup step",
+                    "summary": "kafka setup step - initialize & format storage",
                     "command": f"{BITNAMI_BASE_DIR}/bin/kafka-storage.sh format -t {cluster_id} -c {BITNAMI_BASE_DIR}/config/kraft/server.properties",
                     "startup": "enabled",
                 },
                 "kafka": {
                     "override": "replace",
                     "summary": "kafka service",
-                    "command": f"{BITNAMI_BASE_DIR}/bin/kafka-server-start.sh -t {cluster_id} -c {BITNAMI_BASE_DIR}/config/kraft/server.properties",
+                    "command": f"{BITNAMI_BASE_DIR}/bin/kafka-server-start.sh {BITNAMI_BASE_DIR}/config/kraft/server.properties",
                     "startup": "enabled",
-                    # "after": ["kafka-setup"],
                     "requires": ["kafka-setup"]
                 },
             },

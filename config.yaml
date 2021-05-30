@@ -1,1 +1,5 @@
-options: {}
+options:
+  cluster_id:
+    description: The Kafka cluster id
+    type: str
+    default: 0DyK105ZRcS9AhZvOQHp4A

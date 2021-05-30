@@ -5,6 +5,7 @@ summary: Kafka charm for Kubernetes
 tags:
   - kafka
   - messaging
+  - big-data
 platforms:
   - kubernetes
 bases:
@@ -16,12 +17,14 @@ containers:
 provides:
   kafka:
     interface: kafka
-requires:
-  zookeeper:
-    interface: zookeeper
+# storage:
+#   kafka-data:
+#     type: filesystem
+#     location: /bitnami/kafka
+#     minimum-size: 1G
 resources:
   kafka-image:
     type: oci-image
     description: Docker image for Kafka
     auto-fetch: true
-    upstream-source: 'confluentinc/cp-kafka:5.4.4'
+    upstream-source: 'bitnami/kafka:2.8.0'

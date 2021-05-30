@@ -10,8 +10,8 @@ from ops.pebble import ServiceStatus, Layer, ServiceInfo
 
 logger = logging.getLogger(__name__)
 
-
 SERVICE = "kafka"
+BITNAMI_BASE_DIR = "/opt/bitnami/kafka"
 
 
 class KafkaOperator(CharmBase):
@@ -23,16 +23,6 @@ class KafkaOperator(CharmBase):
         super().__init__(*args)
 
         self.framework.observe(self.on.kafka_pebble_ready, self._on_kafka_pebble_ready)
-
-        # -- database relation observations
-        self.framework.observe(self.on["zookeeper"].relation_changed, self.on_zookeeper_changed)
-        self.framework.observe(self.on["zookeeper"].relation_broken, self.on_zookeeper_broken)
-
-    def on_zookeeper_changed(self):
-        pass
-
-    def on_zookeeper_broken(self):
-        pass
 
     def _restart_kafka(self):
         logger.info("Restarting kafka ...")
@@ -52,10 +42,6 @@ class KafkaOperator(CharmBase):
         container = self.unit.get_container(SERVICE)
         logger.info("_on_kafka_pebble_ready")
 
-        # if container.get_service(SERVICE).is_running():
-        #     logger.info("kafka already started")
-        #     return
-
         logger.info("_start_kafka")
         layer = Layer(raw=self._kafka_layer())
         container.add_layer(SERVICE, layer, combine=True)
@@ -63,22 +49,25 @@ class KafkaOperator(CharmBase):
         self.unit.status = ActiveStatus("kafka started")
 
     def _kafka_layer(self) -> dict:
+        config = self.model.config
+        cluster_id = config["cluster_id"]
         layer = {
             "summary": "kafka layer",
             "description": "kafka layer",
             "services": {
+                "kafka-setup": {
+                    "override": "replace",
+                    "summary": "kafka setup step",
+                    "command": f"{BITNAMI_BASE_DIR}/bin/kafka-storage.sh format -t {cluster_id} -c {BITNAMI_BASE_DIR}/config/kraft/server.properties",
+                    "startup": "enabled",
+                },
                 "kafka": {
                     "override": "replace",
                     "summary": "kafka service",
-                    "command": "/etc/confluent/docker/run",
+                    "command": f"{BITNAMI_BASE_DIR}/kafka-server-start.sh -t {cluster_id} -c {BITNAMI_BASE_DIR}/config/kraft/server.properties",
                     "startup": "enabled",
-                    "environment": {
-                        "KAFKA_BROKER_ID": 1,
-                        "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP": "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT",
-                        "KAFKA_INTER_BROKER_LISTENER_NAME": "PLAINTEXT",
-                        "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR": 1,
-                    },
-                }
+                    "after": ["kafka-setup"],
+                },
             },
         }
 

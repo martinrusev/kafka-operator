@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+import subprocess
 import logging
 from ops.charm import CharmBase, PebbleReadyEvent
 from ops.framework import StoredState
@@ -23,6 +23,7 @@ class KafkaOperator(CharmBase):
         super().__init__(*args)
 
         self.framework.observe(self.on.kafka_pebble_ready, self._on_kafka_pebble_ready)
+        self.framework.observe(self.on.list_topics_action, self.list_topics)
 
     def _restart_kafka(self):
         logger.info("Restarting kafka ...")
@@ -73,6 +74,14 @@ class KafkaOperator(CharmBase):
 
         return layer
 
+    def list_topics(self, event):
+        logger.info("Listing topics")
+        command = [f"{KAFKA_BASE_DIR}/bin/kafka-topics.sh", "--list", "--bootstrap-server", "localhost:9092"]
+        results = {}
+        process = subprocess.run(command, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+
+        results["result"] = process.stdout
+        event.set_results(results)
 
 if __name__ == "__main__":
     main(KafkaOperator)

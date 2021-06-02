@@ -11,7 +11,7 @@ from ops.pebble import ServiceStatus, Layer, ServiceInfo
 logger = logging.getLogger(__name__)
 
 SERVICE = "kafka"
-BITNAMI_BASE_DIR = "/opt/bitnami/kafka"
+KAFKA_BASE_DIR = "/opt/bitnami/kafka"
 
 
 class KafkaOperator(CharmBase):
@@ -58,15 +58,15 @@ class KafkaOperator(CharmBase):
                 "kafka-setup": {
                     "override": "replace",
                     "summary": "kafka setup step - initialize & format storage",
-                    "command": f"{BITNAMI_BASE_DIR}/bin/kafka-storage.sh format -t {cluster_id} -c {BITNAMI_BASE_DIR}/config/kraft/server.properties",
+                    "command": f"{KAFKA_BASE_DIR}/bin/kafka-storage.sh format -t {cluster_id} -c {KAFKA_BASE_DIR}/config/kraft/server.properties",
                     "startup": "enabled",
                 },
                 "kafka": {
                     "override": "replace",
                     "summary": "kafka service",
-                    "command": f"{BITNAMI_BASE_DIR}/bin/kafka-server-start.sh {BITNAMI_BASE_DIR}/config/kraft/server.properties",
+                    "command": f"{KAFKA_BASE_DIR}/bin/kafka-server-start.sh {KAFKA_BASE_DIR}/config/kraft/server.properties",
                     "startup": "enabled",
-                    "requires": ["kafka-setup"]
+                    "requires": ["kafka-setup"],
                 },
             },
         }
